@@ -21,6 +21,7 @@
 
 <script>
 import { focus } from 'vue-focus'
+
 export default {
   name: 'searchBox',
   data() {
@@ -48,6 +49,12 @@ export default {
 
 <style scoped>
   .wrapper-searchBox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: white;
+    z-index: 5;
     border-bottom: 1px solid #e8e8e8;
   }
   img {

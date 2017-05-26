@@ -38,7 +38,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 0px 15px;
-    margin-top: 10px;
+    padding-top: 10px;
     text-align: center;
     border-bottom: 1px solid #d4d4d4;
     position: relative;

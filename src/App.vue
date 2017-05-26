@@ -40,6 +40,7 @@ import Ad from './components/Ad'
 import CusNav from './components/CusNav'
 import ListItem from './components/ListItem'
 import itemsData from './services/itemsData'
+import bus from './services/bus'
 
 function getOpenid() {
 	let getWxInfoUrl = '/foxbill/getWxUserInfo'
@@ -56,6 +57,17 @@ function getOpenid() {
     xhr.open('GET', getWxInfoUrl + search)
     xhr.send()
 }
+function listenScroll() {
+	let scroll = false
+	window.addEventListener('scroll', () => {
+		let scrollTop = document.body.scrollTop
+		if (scrollTop > 0 && !scroll) {
+			bus.$emit('scrolling')
+			scroll = true
+			console.log(scroll)
+		}
+	})
+}
 export default {
   name: 'app',
 	data() {
@@ -71,11 +83,20 @@ export default {
   },
 	created() {
 		getOpenid()
+		listenScroll()
+	},
+	mounted() {
+
 	}
 }
 </script>
 
 <style scoped>
+	#app::before {
+		content: '';
+		display: block;
+		height: 37px;
+	}
 	.title {
 		margin-top: 15px;
 		padding-left: 20px;
