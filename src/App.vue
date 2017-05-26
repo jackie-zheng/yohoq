@@ -3,33 +3,35 @@
     <Search-box></Search-box>
 		<Ad></Ad>
 		<cus-nav></cus-nav>
-		<div class="list-eat">
-			<div class="title">
-				<img src="./assets/eat.png" alt="">
-				饭票
+		<div class="list-panel">
+			<div id="list-eat">
+				<div class="title">
+					<img src="./assets/eat.png" alt="">
+					饭票
+				</div>
+				<list-item v-for="(data, index) in itemsData.eatData" :key="index" :item="data"></list-item>
 			</div>
-			<list-item v-for="(data, index) in itemsData.eatData" :key="index" :item="data"></list-item>
-		</div>
-		<div class="list-play">
-			<div class="title">
-				<img src="./assets/play.png" alt="">
-				娱乐
+			<div id="list-play">
+				<div class="title">
+					<img src="./assets/play.png" alt="">
+					娱乐
+				</div>
+				<list-item v-for="(data, index) in itemsData.playData" :key="index" :item="data"></list-item>
 			</div>
-			<list-item v-for="(data, index) in itemsData.playData" :key="index" :item="data"></list-item>
-		</div>
-		<div class="list-traffic">
-			<div class="title">
-				<img src="./assets/traffic.png" alt="">
-				出行
+			<div id="list-traffic">
+				<div class="title">
+					<img src="./assets/traffic.png" alt="">
+					出行
+				</div>
+				<list-item v-for="(data, index) in itemsData.trafficData" :key="index" :item="data"></list-item>
 			</div>
-			<list-item v-for="(data, index) in itemsData.trafficData" :key="index" :item="data"></list-item>
-		</div>
-		<div class="list-health">
-			<div class="title">
-				<img src="./assets/health.png" alt="">
-				健康
+			<div id="list-health">
+				<div class="title">
+					<img src="./assets/health.png" alt="">
+					健康
+				</div>
+				<list-item v-for="(data, index) in itemsData.healthData" :key="index" :item="data"></list-item>
 			</div>
-			<list-item v-for="(data, index) in itemsData.healthData" :key="index" :item="data"></list-item>
 		</div>
   </div>
 </template>
@@ -58,15 +60,28 @@ function getOpenid() {
     xhr.send()
 }
 function listenScroll() {
-	let scroll = false
+	let lock = false
 	window.addEventListener('scroll', () => {
 		let scrollTop = document.body.scrollTop
-		if (scrollTop > 0 && !scroll) {
-			bus.$emit('scrolling')
-			scroll = true
-			console.log(scroll)
+		if (scrollTop + bus.axis.searchH> bus.axis.nav && !lock) {
+			bus.$emit('toFixed')
+			lock = true
+		} else if (scrollTop + bus.axis.searchH <= bus.axis.nav && lock){
+			bus.$emit('loose')
+			lock = false
 		}
 	})
+}
+function getAxis() {
+	bus.axis = {
+		navH: document.getElementById('nav').offsetHeight,
+		nav: document.getElementById('nav').offsetTop,
+		eat: document.getElementById('list-eat').offsetTop,
+		play: document.getElementById('list-play').offsetTop,
+		traffic: document.getElementById('list-traffic').offsetTop,
+		health: document.getElementById('list-health').offsetTop,
+		searchH: document.querySelector('.wrapper-searchBox').offsetHeight
+	}
 }
 export default {
   name: 'app',
@@ -86,12 +101,15 @@ export default {
 		listenScroll()
 	},
 	mounted() {
-
+		setTimeout( getAxis)
 	}
 }
 </script>
 
 <style scoped>
+	.list-panel {
+		overflow: hidden;
+	}
 	#app::before {
 		content: '';
 		display: block;

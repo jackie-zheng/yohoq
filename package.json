@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "animated-scrollto": "^1.1.0",
     "fastclick": "^1.0.6",
     "vue": "^2.2.6",
     "vue-focus": "^2.1.0"

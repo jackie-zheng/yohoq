@@ -14,8 +14,10 @@ export default {
 <style scoped>
   a {
     width: 100%;
+    height: 31.98vh;
     display: block;
     padding: 10px 15px;
+    overflow: hidden;
   }
   img {
     width: 100%;

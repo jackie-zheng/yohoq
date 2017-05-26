@@ -1,18 +1,18 @@
 <template>
-  <ul>
-    <li class="active" @click="navTo('eat')">
+  <ul id="nav">
+    <li @click="navTo('eat')" :class="{active: params.eatNav}">
       <img src="../assets/eat.png" alt="">
       饭票
     </li>
-    <li @click="navTo('play')">
+    <li @click="navTo('play')" :class="{active: params.playNav}">
       <img src="../assets/play.png" alt="">
       娱乐
     </li>
-    <li @click="navTo('traffic')">
+    <li @click="navTo('traffic')" :class="{active: params.trafficNav}">
       <img src="../assets/traffic.png" alt="">
       出行
     </li>
-    <li @click="navTo('health')">
+    <li @click="navTo('health')" :class="{active: params.healthNav}">
       <img src="../assets/health.png" alt="">
       健康
     </li>
@@ -20,19 +20,73 @@
 </template>
 
 <script>
+import scrollTo from 'animated-scrollto'
+import bus from '../services/bus'
+function listenFixed() {
+  let navElem = document.getElementById('nav')
+  let navH = navElem.offsetHeight
+  bus.$on('toFixed', () => {
+    navElem.classList.add('toFixed')
+    navElem.nextElementSibling.style.marginTop = navH + 'px'
+  })
+  bus.$on('loose', () => {
+    navElem.classList.remove('toFixed')
+    navElem.nextElementSibling.style.marginTop = '0'
+  })
+}
 export default {
   name: 'cusNav',
-  methods: {
-    navTo(type) {
-      if (type === 'eat') {
-        
+  data() {
+    return  {
+      params: {
+        eatNav: true,
+        playNav: false,
+        trafficNav: false,
+        healthNav: false
       }
     }
+  },
+  methods: {
+    navTo(type) {
+      Object.keys(this.params).forEach( (key) => {
+        this.params[key] = false
+      })
+      if (type === 'eat') {
+        this.params.eatNav = true
+        let dis = bus.axis.eat - bus.axis.navH - bus.axis.searchH
+        scrollTo(document.body, dis - 10, 300)
+      }
+      if (type === 'play') {
+        this.params.playNav = true
+        let dis = bus.axis.play - bus.axis.navH - bus.axis.searchH
+        scrollTo(document.body, dis - 10, 300)
+      }
+      if (type === 'traffic') {
+        this.params.trafficNav = true
+        let dis = bus.axis.traffic - bus.axis.navH - bus.axis.searchH
+        scrollTo(document.body, dis - 10, 300)
+      }
+      if (type === 'health') {
+        this.params.healthNav = true
+        let dis = bus.axis.health - bus.axis.navH - bus.axis.searchH
+        scrollTo(document.body, dis - 10, 300)
+      }
+    }
+  },
+  mounted() {
+    listenFixed()
   }
 }
 </script>
 
 <style scoped>
+  .toFixed {
+    position: fixed;
+    top: 38px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+  }
   ul {
     display: flex;
     justify-content: space-between;
@@ -42,6 +96,7 @@ export default {
     text-align: center;
     border-bottom: 1px solid #d4d4d4;
     position: relative;
+    background-color: white;
   }
   img {
     height: 20px;

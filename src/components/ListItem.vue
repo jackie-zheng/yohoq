@@ -50,9 +50,18 @@ export default {
   }
   
   .left {
-    width: 111px;
-    height: 70px;
-    margin-right: 15px;
+    width: 29.6vw;
+    height: 19vw;
+    margin-right: 4vw;
+    flex-shrink: 0;
+  }
+  .right {
+    width: calc(100% - 29.6vw - 4vw);
+  }
+  .right > .title {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .go-buy {
     position: absolute;
