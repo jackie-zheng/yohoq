@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper-searchBox">
     <div class="search-ct">
-      <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索" @click="showSearchBox"></div>
+      <div class="search-btn" @click="showSearchBox"><img src="../assets/searchBox.png" alt="搜索" ></div>
       <div v-show="showBox" class="search-box-ct">
         <transition name="slide-fade">
           <div class="search-box" v-show="showBox">
             <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
-            <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" autofocus>
+            <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="true">
             <div class="clear-btn" @click="clearContent" v-if="content"><img src="../assets/clear.png" alt="清除"></div>
             <div class="search" @click="searchKey"><img src="../assets/arrow.png" alt="确认"></div>
           </div>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { focus } from 'vue-focus'
 export default {
   name: 'searchBox',
   data() {
@@ -28,12 +29,15 @@ export default {
       content: ''
     }
   },
+  directives: {
+    focus
+  },
   methods: {
     showSearchBox() {
       this.showBox = !this.showBox
     },
     searchKey() {
-      this.showBox = !this.showBox
+      this.showSearchBox()
     },
     clearContent() {
       this.content = ''
@@ -48,6 +52,7 @@ export default {
   }
   img {
     width: 100%;
+    vertical-align: -3px;
   }
   .mask {
     width: 100vw;
@@ -55,7 +60,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: 10;
     background-color: rgba(0, 0, 0, 0.5);
   }
   .search-box-ct {
@@ -65,6 +70,7 @@ export default {
     width: 100vw;
     background: white;
     height: 38px;
+    z-index: 100;
   }
   .search-ct {
     width: 100%;
@@ -76,6 +82,16 @@ export default {
   .search-btn {
     width: 15px;
     margin-left: 5px;
+    position: relative;
+  }
+  .search-btn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transform: scale(1.7)
   }
   .search-box {
     position: absolute;
@@ -90,11 +106,14 @@ export default {
     display: flex;
     align-items: center;
   }
+  
   .search-box > input {
+    display: block;
     flex: 1;
     border: 0;
     background-color: white;
     margin-left: 10px;
+    height: 100%;
   }
   .search-box > .search-btn {
     width: 15px;

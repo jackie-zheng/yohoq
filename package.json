@@ -10,7 +10,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vue": "^2.2.6"
+    "fastclick": "^1.0.6",
+    "vue": "^2.2.6",
+    "vue-focus": "^2.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

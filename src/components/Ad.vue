@@ -13,7 +13,9 @@ export default {
 
 <style scoped>
   a {
-    display: inline-block;
+    width: 100%;
+    display: block;
+    padding: 10px 15px;
   }
   img {
     width: 100%;
