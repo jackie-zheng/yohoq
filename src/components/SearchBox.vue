@@ -63,6 +63,7 @@ export default {
       this.showBox = true
     },
     searchKey() {
+      // this.focused = false
       this.filtedData = []
       for (let key in itemsData) {
         let items = itemsData[key]
@@ -98,6 +99,13 @@ export default {
   }
 </style>
 <style scoped>
+  .wrapper-searchBox .exit:active,
+  .wrapper-searchBox .search:active {
+    background-color: #bbceea
+  }
+  input {
+    font-size: 14px;
+  }
   .none {
     text-align: center;
     background-color: white;
@@ -179,6 +187,7 @@ export default {
   .search-box {
     position: relative;
     margin: 5px 0;
+    margin-right: 15px;
     width: 70vw;
     border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -187,9 +196,13 @@ export default {
     height: 30px;
   }
   .exit {
-    width: 18px;
+    flex: 1;
     margin-right: 15px;
     position: relative;
+  }
+  .exit img{
+    width: 22px;
+    float: right;
   }
   .exit::after {
     content: '';
@@ -209,12 +222,12 @@ export default {
     height: 100%;
   }
   .search-box > .search-btn {
-    width: 15px;
+    width: 20px;
   }
   .clear-btn {
     position: absolute;
-    right: 40px;
-    width: 15px;
+    right: 50px;
+    width: 20px;
     top: 0;
     bottom: 0;
     margin: auto;
@@ -222,7 +235,7 @@ export default {
     align-items: center;
   }
   .search-box > .search {
-    width: 22px;
+    width: 30px;
     margin-right: 1px;
     position: relative;
   }
