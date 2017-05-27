@@ -10,6 +10,7 @@
 					饭票
 				</div>
 				<list-item v-for="(data, index) in itemsData.eatData" :key="index" :item="data"></list-item>
+				<div v-if="!itemsData.eatData[0]" class="none">敬请期待</div>
 			</div>
 			<div id="list-play">
 				<div class="title">
@@ -17,6 +18,7 @@
 					娱乐
 				</div>
 				<list-item v-for="(data, index) in itemsData.playData" :key="index" :item="data"></list-item>
+				<div v-if="!itemsData.playData[0]" class="none">敬请期待</div>
 			</div>
 			<div id="list-traffic">
 				<div class="title">
@@ -24,6 +26,7 @@
 					出行
 				</div>
 				<list-item v-for="(data, index) in itemsData.trafficData" :key="index" :item="data"></list-item>
+				<div v-if="!itemsData.trafficData[0]" class="none">敬请期待</div>
 			</div>
 			<div id="list-health">
 				<div class="title">
@@ -31,6 +34,7 @@
 					健康
 				</div>
 				<list-item v-for="(data, index) in itemsData.healthData" :key="index" :item="data"></list-item>
+				<div v-if="!itemsData.healthData[0]" class="none">敬请期待</div>
 			</div>
 		</div>
   </div>
@@ -44,6 +48,12 @@ import ListItem from './components/ListItem'
 import itemsData from './services/itemsData'
 import bus from './services/bus'
 
+
+function fbdWxSlide() {
+	document.body.addEventListener('touchmove', (event) => {
+		event.preventDefault()
+	})
+}
 function getOpenid() {
 	let getWxInfoUrl = '/foxbill/getWxUserInfo'
 	let search = location.search
@@ -146,6 +156,12 @@ export default {
 	.title img {
 		width: 14px;
 		margin-right: 4px;
+	}
+	.none {
+		text-align: center;
+		font-size: 24px;
+		margin: 30px 0;
+		color: #aaa;
 	}
 </style>
 <style>

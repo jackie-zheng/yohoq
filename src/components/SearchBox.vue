@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper-searchBox">
     <div class="search-ct">
-      <div class="search-btn" @click="showSearchBox"><img src="../assets/searchBox.png" alt="搜索" ></div>
+      <div class="search-btn-ct"><div class="search-btn" @click="showSearchBox" ><img src="../assets/searchBox.png" alt="搜索"></div></div>
       <div v-show="showBox" class="search-box-ct">
-        <div class="exit"><img src="../assets/arrow-left.png" alt="退出" @click="showSearchBox"></div>
+        <div class="exit" @click="showSearchBox"><img src="../assets/arrow-left.png" alt="退出" ></div>
         <div class="search-box" v-show="showBox">
           <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
           <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="true">
@@ -48,14 +48,10 @@ export default {
   methods: {
     showSearchBox() {
       this.showBox = !this.showBox
-      cacheScrollTop = document.body.scrollTop
       if (this.showBox) {
-        window.onscroll = () => {
-          console.log(document.body.scrollTop)
-          document.body.scrollTop = cacheScrollTop
-        }
+        document.body.classList.add('scrollFixed')
       } else {
-        window.onscroll = null
+        document.body.classList.remove('scrollFixed')
       }
     },
     searchKey() {
@@ -77,6 +73,12 @@ export default {
 }
 </script>
 
+<style>
+  .scrollFixed {
+    overflow: hidden;
+    position: fixed;
+  }
+</style>
 <style scoped>
   .wrapper-searchBox {
     position: fixed;
@@ -159,8 +161,17 @@ export default {
   .exit {
     width: 18px;
     margin-right: 15px;
+    position: relative;
   }
-  
+  .exit::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transform: scale(1.8)
+  }
   .search-box > input {
     display: block;
     flex: 1;
@@ -185,8 +196,17 @@ export default {
   .search-box > .search {
     width: 22px;
     margin-right: 1px;
+    position: relative;
   }
-
+  .search::after , .clear-btn::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transform: scale(1.8)
+  }
   
   /*.slide-fade-leave-active , .slide-fade-enter-active{
     transition: all .8s ;

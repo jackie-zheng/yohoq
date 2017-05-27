@@ -1,5 +1,5 @@
 <template>
-  <ul id="nav">
+  <ul id="nav" v-fbdtouchmove> 
     <li @click="navTo('eat')" :class="{active: params.eatNav}">
       <img src="../assets/eat.png" alt="">
       饭票
@@ -94,10 +94,13 @@ export default {
 <style scoped>
   .toFixed {
     position: fixed;
-    top: 38px;
+    top: 37px;
     left: 0;
     width: 100%;
     z-index: 4;
+  }
+  ul > li:active {
+    background-color: #bbceea
   }
   ul {
     display: flex;
