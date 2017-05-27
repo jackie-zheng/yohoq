@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper-item">
+  <div class="wrapper-item" @click="navTo">
     <div class="left">
       <img :src="item.imgUrl" alt="">
     </div>
@@ -9,7 +9,7 @@
       <div class="discount">{{ item.discount | currency}}</div>
       <div class="origin-money">{{ item.orgMoney | currency}}</div>
     </div>
-    <div class="go-buy" @click="navTo">去购买</div>
+    <div class="go-buy" >去购买</div>
   </div>
 </template>
 

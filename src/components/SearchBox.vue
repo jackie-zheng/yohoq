@@ -1,18 +1,19 @@
 <template>
   <div class="wrapper-searchBox">
     <div class="search-ct">
-      <div class="search-btn-ct"><div class="search-btn" @click="showSearchBox" ><img src="../assets/searchBox.png" alt="搜索"></div></div>
+      <div class="search-btn-ct" @click="showSearchBox"><div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div></div>
       <div v-show="showBox" class="search-box-ct">
-        <div class="exit" @click="showSearchBox"><img src="../assets/arrow-left.png" alt="退出" ></div>
+        <div class="exit" onclick="history.back()"><img src="../assets/arrow-left.png" alt="退出" ></div>
         <div class="search-box" v-show="showBox">
           <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
-          <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="true">
+          <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="focused">
           <div class="clear-btn" @click="clearContent" v-if="content"><img src="../assets/clear.png" alt="清除"></div>
           <div class="search" @click="searchKey"><img src="../assets/arrow.png" alt="确认"></div>
         </div>
       </div>
       <div class="mask" v-show="showBox">
         <list-item :item="data" v-for="(data, index) in filtedData" :key="index" class="list-item"></list-item>
+        <div class="none" v-if="showError">抱歉，没有查到相关数据</div>
       </div>
     </div>
   </div>
@@ -29,14 +30,25 @@ export default {
     return {
       showBox: false,
       content: '',
-      filtedData: []
+      filtedData: [],
+      focused: true,
+      result: false
     }
   },
   watch: {
     showBox(newValue) {
       if (!newValue) {
         this.clearContent()
+        this.focused = false
+        document.body.classList.remove('scrollFixed')
+      } else {
+        this.focused = true
+        document.body.classList.add('scrollFixed')
+        
       }
+    },
+    content(newValue) {
+      if (!newValue) this.showError = false
     }
   },
   components: {
@@ -47,27 +59,33 @@ export default {
   },
   methods: {
     showSearchBox() {
-      this.showBox = !this.showBox
-      if (this.showBox) {
-        document.body.classList.add('scrollFixed')
-      } else {
-        document.body.classList.remove('scrollFixed')
-      }
+      history.pushState('search', '', '')
+      this.showBox = true
     },
     searchKey() {
       this.filtedData = []
       for (let key in itemsData) {
         let items = itemsData[key]
         let filtedArr = items.filter( (item) => {
-          let regexp = new RegExp(this.content)
+          let regexp = new RegExp(this.content || 'wrong')
           if (regexp.test(item.title)) return true
         })
         this.filtedData.push(...filtedArr)
+        this.showError = this.filtedData[0] ? false : true 
       }
     },
     clearContent() {
       this.content = ''
       this.filtedData = []
+    }
+  },
+  mounted() {
+    window.onpopstate = (e) => {
+      if (history.state === 'search') {
+        this.showBox = true
+      } else {
+        this.showBox = false
+      }
     }
   }
 }
@@ -80,6 +98,21 @@ export default {
   }
 </style>
 <style scoped>
+  .none {
+    text-align: center;
+    background-color: white;
+    margin: 0 20px;
+    margin-top: 10px;
+    padding: 20px 0;
+  }
+  .search-btn-ct {
+    width: 100%;
+    display: flex;
+    height: 40px;
+    align-items: center;
+    padding-right: 20px;
+    flex-direction: row-reverse;
+  }
   .wrapper-searchBox {
     position: fixed;
     top: 0;
@@ -125,13 +158,12 @@ export default {
   }
   .search-ct {
     width: 100%;
-    padding: 10px 10px;
     display: flex;
     flex-direction: row-reverse;
     position: relative;
   }
   .search-btn {
-    width: 15px;
+    width: 20px;
     margin-left: 5px;
     position: relative;
   }
@@ -145,11 +177,6 @@ export default {
     transform: scale(1.7)
   }
   .search-box {
-    /*position: absolute;*/
-    /*top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;*/
     position: relative;
     margin: 5px 0;
     width: 70vw;
@@ -157,6 +184,7 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
+    height: 30px;
   }
   .exit {
     width: 18px;
