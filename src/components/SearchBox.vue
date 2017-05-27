@@ -22,7 +22,7 @@
 import { focus } from 'vue-focus'
 import ListItem from './ListItem'
 import itemsData from '../services/itemsData'
-
+let cacheScrollTop
 export default {
   name: 'searchBox',
   data() {
@@ -43,13 +43,23 @@ export default {
     ListItem
   },
   directives: {
-    focus
+    focus,
   },
   methods: {
     showSearchBox() {
       this.showBox = !this.showBox
+      cacheScrollTop = document.body.scrollTop
+      if (this.showBox) {
+        window.onscroll = () => {
+          console.log(document.body.scrollTop)
+          document.body.scrollTop = cacheScrollTop
+        }
+      } else {
+        window.onscroll = null
+      }
     },
     searchKey() {
+      this.filtedData = []
       for (let key in itemsData) {
         let items = itemsData[key]
         let filtedArr = items.filter( (item) => {
@@ -108,6 +118,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid #cac6c6;
+    box-shadow: 0px 0px 22px #999;
   }
   .search-ct {
     width: 100%;
