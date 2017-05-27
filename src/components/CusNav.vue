@@ -34,6 +34,17 @@ function listenFixed() {
     navElem.nextElementSibling.style.marginTop = '0'
   })
 }
+function listenArea() {
+  let elems = document.getElementById('nav').children
+  Array.prototype.forEach.call(elems, (item, index) => {
+    bus.$on('area' + (index + 1), () => {
+      Array.prototype.forEach.call(elems, (item) => {
+        item.classList.remove('active')
+      })
+      item.classList.add('active')
+    })
+  })
+}
 export default {
   name: 'cusNav',
   data() {
@@ -48,26 +59,26 @@ export default {
   },
   methods: {
     navTo(type) {
-      Object.keys(this.params).forEach( (key) => {
-        this.params[key] = false
-      })
+      // Object.keys(this.params).forEach( (key) => {
+      //   this.params[key] = false
+      // })
       if (type === 'eat') {
-        this.params.eatNav = true
+        // this.params.eatNav = true
         let dis = bus.axis.eat - bus.axis.navH - bus.axis.searchH
         scrollTo(document.body, dis - 10, 300)
       }
       if (type === 'play') {
-        this.params.playNav = true
+        // this.params.playNav = true
         let dis = bus.axis.play - bus.axis.navH - bus.axis.searchH
         scrollTo(document.body, dis - 10, 300)
       }
       if (type === 'traffic') {
-        this.params.trafficNav = true
+        // this.params.trafficNav = true
         let dis = bus.axis.traffic - bus.axis.navH - bus.axis.searchH
         scrollTo(document.body, dis - 10, 300)
       }
       if (type === 'health') {
-        this.params.healthNav = true
+        // this.params.healthNav = true
         let dis = bus.axis.health - bus.axis.navH - bus.axis.searchH
         scrollTo(document.body, dis - 10, 300)
       }
@@ -75,6 +86,7 @@ export default {
   },
   mounted() {
     listenFixed()
+    listenArea()
   }
 }
 </script>

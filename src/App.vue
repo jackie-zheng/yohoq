@@ -48,27 +48,49 @@ function getOpenid() {
 	let getWxInfoUrl = '/foxbill/getWxUserInfo'
 	let search = location.search
 	let xhr = new XMLHttpRequest()
-    xhr.onload = function(e) {
-      let res = JSON.parse(e.target.response)
-      if (res && res.openid) {
-        sessionStorage.setItem('openid', res.openid)
-      } else {
-				throw new Error('获取openid失败...')
-			}
-    }
-    xhr.open('GET', getWxInfoUrl + search)
-    xhr.send()
+	xhr.onload = function(e) {
+		let res = JSON.parse(e.target.response)
+		if (res && res.openid) {
+			sessionStorage.setItem('openid', res.openid)
+		} else {
+			throw new Error('获取openid失败...')
+		}
+	}
+	xhr.open('GET', getWxInfoUrl + search)
+	xhr.send()
 }
 function listenScroll() {
 	let lock = false
+	let areaLock
 	window.addEventListener('scroll', () => {
 		let scrollTop = document.body.scrollTop
-		if (scrollTop + bus.axis.searchH> bus.axis.nav && !lock) {
+		if (scrollTop + bus.axis.searchH > bus.axis.nav && !lock) {
 			bus.$emit('toFixed')
 			lock = true
 		} else if (scrollTop + bus.axis.searchH <= bus.axis.nav && lock){
 			bus.$emit('loose')
 			lock = false
+		}
+		let areaArr = [bus.axis.eat, bus.axis.play, bus.axis.traffic, bus.axis.health]
+		areaArr = areaArr.sort((a, b) => { return a > b })
+		let scrollDis = scrollTop + bus.axis.searchH + bus.axis.navH
+		let microDis = 130
+		
+		if (scrollDis <= areaArr[1] - microDis && areaLock !== 'area1') {
+			bus.$emit('area1')
+			areaLock = 'area1'
+		}
+		if (scrollDis > areaArr[1] - microDis && scrollDis <= areaArr[2] - microDis && areaLock !== 'area2') {
+			bus.$emit('area2')
+			areaLock = 'area2'
+		}
+		if (scrollDis > areaArr[2] - microDis && scrollDis <= areaArr[3] - microDis && areaLock !== 'area3') {
+			bus.$emit('area3')
+			areaLock = 'area3'
+		}
+		if (scrollDis > areaArr[3] - microDis && areaLock !== 'area4') {
+			bus.$emit('area4')
+			areaLock = 'area4'
 		}
 	})
 }
