@@ -97,7 +97,7 @@ export default {
     top: 38px;
     left: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 4;
   }
   ul {
     display: flex;

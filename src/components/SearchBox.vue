@@ -3,32 +3,44 @@
     <div class="search-ct">
       <div class="search-btn" @click="showSearchBox"><img src="../assets/searchBox.png" alt="搜索" ></div>
       <div v-show="showBox" class="search-box-ct">
-        <transition name="slide-fade">
-          <div class="search-box" v-show="showBox">
-            <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
-            <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="true">
-            <div class="clear-btn" @click="clearContent" v-if="content"><img src="../assets/clear.png" alt="清除"></div>
-            <div class="search" @click="searchKey"><img src="../assets/arrow.png" alt="确认"></div>
-          </div>
-        </transition>
+        <div class="exit"><img src="../assets/arrow-left.png" alt="退出" @click="showSearchBox"></div>
+        <div class="search-box" v-show="showBox">
+          <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
+          <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="true">
+          <div class="clear-btn" @click="clearContent" v-if="content"><img src="../assets/clear.png" alt="清除"></div>
+          <div class="search" @click="searchKey"><img src="../assets/arrow.png" alt="确认"></div>
+        </div>
       </div>
-      <transition name="fade">
-        <div class="mask" v-show="showBox" @click="showSearchBox"></div>
-      </transition>
+      <div class="mask" v-show="showBox">
+        <list-item :item="data" v-for="(data, index) in filtedData" :key="index" class="list-item"></list-item>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { focus } from 'vue-focus'
+import ListItem from './ListItem'
+import itemsData from '../services/itemsData'
 
 export default {
   name: 'searchBox',
   data() {
     return {
       showBox: false,
-      content: ''
+      content: '',
+      filtedData: []
     }
+  },
+  watch: {
+    showBox(newValue) {
+      if (!newValue) {
+        this.clearContent()
+      }
+    }
+  },
+  components: {
+    ListItem
   },
   directives: {
     focus
@@ -38,10 +50,18 @@ export default {
       this.showBox = !this.showBox
     },
     searchKey() {
-      this.showSearchBox()
+      for (let key in itemsData) {
+        let items = itemsData[key]
+        let filtedArr = items.filter( (item) => {
+          let regexp = new RegExp(this.content)
+          if (regexp.test(item.title)) return true
+        })
+        this.filtedData.push(...filtedArr)
+      }
     },
     clearContent() {
       this.content = ''
+      this.filtedData = []
     }
   }
 }
@@ -67,8 +87,15 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 100;
     background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 40px;
+    overflow: scroll;
+  }
+  .mask .list-item {
+    padding: 15px 10px;
+    margin: 0 20px;
+    margin-top: 20px;
   }
   .search-box-ct {
     position: fixed;
@@ -77,7 +104,10 @@ export default {
     width: 100vw;
     background: white;
     height: 38px;
-    z-index: 100;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .search-ct {
     width: 100%;
@@ -101,17 +131,22 @@ export default {
     transform: scale(1.7)
   }
   .search-box {
-    position: absolute;
-    top: 0;
+    /*position: absolute;*/
+    /*top: 0;
     bottom: 0;
     left: 0;
-    right: 0;
-    margin: 5px auto;
+    right: 0;*/
+    position: relative;
+    margin: 5px 0;
     width: 70vw;
     border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
+  }
+  .exit {
+    width: 18px;
+    margin-right: 15px;
   }
   
   .search-box > input {
@@ -139,6 +174,8 @@ export default {
     width: 22px;
     margin-right: 1px;
   }
+
+  
   /*.slide-fade-leave-active , .slide-fade-enter-active{
     transition: all .8s ;
   }

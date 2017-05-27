@@ -47,6 +47,7 @@ export default {
     padding: 15px 20px;
     display: flex;
     position: relative;
+    background-color: white;
   }
   
   .left {
