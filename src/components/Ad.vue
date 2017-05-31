@@ -16,7 +16,7 @@ export default {
     width: 100%;
     height: 31.98vh;
     display: block;
-    padding: 10px 15px;
+    padding: 10px 0;
     overflow: hidden;
   }
   img {

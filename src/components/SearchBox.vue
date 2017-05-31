@@ -1,19 +1,31 @@
 <template>
   <div class="wrapper-searchBox">
     <div class="search-ct">
-      <div class="search-btn-ct" @click="showSearchBox"><div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div></div>
+      <div class="search-btn-ct" @click="showSearchBox">
+        <div class="search-box">
+          <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
+          <span>请输入搜索内容</span>
+        </div>
+        <!--<div class="search-btn">
+          <img src="../assets/searchBox.png" alt="搜索">
+        </div>-->
+      </div>
       <div v-show="showBox" class="search-box-ct">
         <div class="exit" onclick="history.back()"><img src="../assets/arrow-left.png" alt="退出" ></div>
         <div class="search-box" v-show="showBox">
           <div class="search-btn"><img src="../assets/searchBox.png" alt="搜索"></div>
           <input type="text" placeholder="请输入搜索内容" size="1" v-model="content" v-focus="focused">
           <div class="clear-btn" @click="clearContent" v-if="content"><img src="../assets/clear.png" alt="清除"></div>
-          <div class="search" @click="searchKey"><img src="../assets/arrow.png" alt="确认"></div>
+          <!--<div class="search" @click="searchKey"><img src="../assets/arrow.png" alt="确认"></div>-->
         </div>
+        <div class="search" @click="searchKey">搜索</div>
       </div>
       <div class="mask" v-show="showBox">
         <list-item :item="data" v-for="(data, index) in filtedData" :key="index" class="list-item"></list-item>
-        <div class="none" v-if="showError">抱歉，没有查到相关数据</div>
+        <div class="none" v-if="showError">
+          <p>您要找的东西不在图图这里</p>
+          <p>图图会努力添加更多新品</p>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +44,8 @@ export default {
       content: '',
       filtedData: [],
       focused: true,
-      result: false
+      result: false,
+      showError: false
     }
   },
   watch: {
@@ -40,6 +53,7 @@ export default {
       if (!newValue) {
         this.clearContent()
         this.focused = false
+        this.showError = false
         document.body.classList.remove('scrollFixed')
       } else {
         this.focused = true
@@ -99,8 +113,9 @@ export default {
   }
 </style>
 <style scoped>
-  .wrapper-searchBox .exit:active,
-  .wrapper-searchBox .search:active {
+  
+  .wrapper-searchBox .exit:active::after,
+  .wrapper-searchBox .search:active::after {
     background-color: #bbceea
   }
   input {
@@ -112,6 +127,9 @@ export default {
     margin: 0 20px;
     margin-top: 10px;
     padding: 20px 0;
+  }
+  .none p {
+    margin-top: 10px;
   }
   .search-btn-ct {
     width: 100%;
@@ -196,7 +214,6 @@ export default {
     height: 30px;
   }
   .exit {
-    flex: 1;
     margin-right: 15px;
     position: relative;
   }
@@ -215,7 +232,8 @@ export default {
   }
   .search-box > input {
     display: block;
-    flex: 1;
+    /*flex: 1;*/
+    width: 80%;
     border: 0;
     background-color: white;
     margin-left: 10px;
@@ -234,10 +252,11 @@ export default {
     display: flex;
     align-items: center;
   }
-  .search-box > .search {
+  .search {
     width: 30px;
     margin-right: 1px;
     position: relative;
+    white-space: nowrap;
   }
   .search::after , .clear-btn::after{
     content: '';
@@ -248,7 +267,17 @@ export default {
     bottom: 0;
     transform: scale(1.8)
   }
-  
+  .search-btn-ct{
+    padding-right: 0;
+    justify-content: center;
+  }
+  .search-btn-ct > .search-box {
+    margin: auto;
+  }
+  .search-btn-ct > .search-box span {
+    margin-left: 8px;
+    font-size: 14px;
+  }
   /*.slide-fade-leave-active , .slide-fade-enter-active{
     transition: all .8s ;
   }

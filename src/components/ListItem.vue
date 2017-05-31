@@ -44,7 +44,7 @@ export default {
   }
   .wrapper-item {
     border-bottom: 1px solid #ebebeb;
-    padding: 15px 20px;
+    padding: 15px 0;
     display: flex;
     position: relative;
     background-color: white;
